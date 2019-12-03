@@ -77,8 +77,8 @@ def create_app(test_config=None):
     def delete_question(question_id):
 
         try:
-            question = Question.query.filter
-            (Question.id == question_id).one_or_none()
+            q = Question.query.filter(Question.id == question_id)
+            question = q.one_or_none()
 
             if question is None:
                 abort(404)
@@ -115,14 +115,14 @@ def create_app(test_config=None):
 
         if search:
             try:
-                selection = Question.query.order_by(Question.id).filter
-                (Question.question.ilike('%{}%'.format(search))).all()
-                current_questions = paginate_questions(request, selection)
+                s = Question.query.order_by(Question.id)
+                s_ = s.filter(Question.question.ilike('%{}%'.format(search)))
+                current_questions = paginate_questions(request, s_.all())
 
                 return jsonify(
                     {
                         'success': True, 'questions': current_questions,
-                        'total_questions': len(selection)
+                        'total_questions': len(s_.all())
                     })
             except:
                 abort(422)
@@ -147,17 +147,16 @@ def create_app(test_config=None):
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def get_questions_by_category(category_id):
         try:
-            selection = Question.query.order_by(Question.id).filter
-            (Question.category == category_id).all()
+            s = Question.query.order_by(Question.id)
+            selection = s.filter(Question.category == category_id).all()
 
             if selection is None:
                 abort(404)
 
             current_questions = paginate_questions(request, selection)
 
-            category = Category.query.filter
-            (Category.id == category_id).one_or_none()
-            current_category = category.format()
+            cat = Category.query.filter(Category.id == category_id)
+            current_category = cat.one_or_none().format()
 
             return jsonify({
                 'success': True,
@@ -180,12 +179,13 @@ def create_app(test_config=None):
 
             if quiz_category != 0:
                 q = Question.query.order_by(func.random())
-                q_f = q.filter(Question.category == quiz_category,
-                               Question.id.notin_(previous_questions))
+                q_f = q.filter(
+                    Question.category == quiz_category, Question.id.notin_(
+                        previous_questions))
                 question = q_f.first()
             else:
-                question = Question.query.order_by(func.random()).filter
-                (Question.id.notin_(previous_questions)).first()
+                question = Question.query.order_by(func.random()).filter(
+                    Question.id.notin_(previous_questions)).first()
 
             if question:
                 return jsonify({'success': True,
