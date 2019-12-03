@@ -290,7 +290,7 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 #### POST /quizzes
 
-  - **PURPOSE:** To get a list of paginated questions based on category
+  - **PURPOSE:** To get a random questions to play the quiza
   
   - **URL:** {BaseURL}/quizzes
   
