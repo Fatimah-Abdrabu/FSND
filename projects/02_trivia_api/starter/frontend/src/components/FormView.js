@@ -70,15 +70,15 @@ class FormView extends Component {
         <form className="form-view" id="add-question-form" onSubmit={this.submitQuestion}>
           <label>
             Question
-            <input type="text" name="question" onChange={this.handleChange}/>
+            <input type="text" required name="question" onChange={this.handleChange}/>
           </label>
           <label>
             Answer
-            <input type="text" name="answer" onChange={this.handleChange}/>
+            <input type="text" required name="answer" onChange={this.handleChange}/>
           </label>
           <label>
             Difficulty
-            <select name="difficulty" onChange={this.handleChange}>
+            <select name="difficulty" required onChange={this.handleChange}>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -88,10 +88,10 @@ class FormView extends Component {
           </label>
           <label>
             Category
-            <select name="category" onChange={this.handleChange}>
-              {Object.keys(this.state.categories).map(id => {
+            <select name="category" required onChange={this.handleChange}>
+              {Object.keys(this.state.categories).map(cat => {
                   return (
-                    <option key={id} value={id}>{this.state.categories[id]}</option>
+                    <option key={cat} value={this.state.categories[cat].id}>{this.state.categories[cat].type}</option>
                   )
                 })}
             </select>
