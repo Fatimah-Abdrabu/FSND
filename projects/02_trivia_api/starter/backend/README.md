@@ -59,8 +59,63 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 ### Error Handling
 
   A list of error handlers have been set for the common expected errors 
-  including 400, 404, 422 and 500. 
+  including `400`, `404`, `422` and `500`. 
   All are returned as JSON objects in the following format: success value (always False), error code and the error message
+  
+```
+
+{
+        "success": False,
+        "error": 404,
+        "message": "resources not found"
+}
+
+```
+
+### Endpoints 
+#### GET /categories
+  - **PURPOSE:** To get all available categories
+  
+  - **URL:** {BaseURL}/categories
+  
+  - **HTTP METHOD:** GET
+  
+  - **REQUEST ARGUMENTS:** none
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/categories`
+    
+  - **RETURNS:** A formatted Json string contains a list of category objects and the success value
+  ```
+  {  
+   "categories":[  
+      {  
+         "id":1,
+         "type":"Science"
+      },
+      {  
+         "id":2,
+         "type":"Art"
+      },
+      {  
+         "id":3,
+         "type":"Geography"
+      },
+      {  
+         "id":4,
+         "type":"History"
+      },
+      {  
+         "id":5,
+         "type":"Entertainment"
+      },
+      {  
+         "id":6,
+         "type":"Sports"
+      }
+   ],
+   "success":true
+}
+  ```
 
 
 ## Testing
