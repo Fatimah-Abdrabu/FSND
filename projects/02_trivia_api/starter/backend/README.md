@@ -245,6 +245,7 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
     
     ```
  
+ 
 #### GET /categories/{category_id}/questions
 
   - **PURPOSE:** To get a list of paginated questions based on category
@@ -287,6 +288,34 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 }
  ```
 
+#### POST /quizzes
+
+  - **PURPOSE:** To get a list of paginated questions based on category
+  
+  - **URL:** {BaseURL}/quizzes
+  
+  - **HTTP METHOD:** POST
+  
+  - **REQUEST ARGUMENTS:** category (it could be 0), array of previous_questions (it could be empty)
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/quizzes -X POST -H "Content-Type: application/json" -d '{"quiz_category":"6","previous_questions":["10"]}'`
+    
+  - **RETURNS:** A formatted Json string contains a selected random question and the success value. If No questions found, the success value will only get returned
+
+```
+{
+    "question": {
+        "answer": "Uruguay",
+        "category": 6,
+        "difficulty": 4,
+        "id": 11,
+        "question": "Which country won the first ever soccer World Cup in 1930?"
+    },
+    "success": true
+}
+
+```
+  
 ## Testing The Backend
 To run the tests, run
 ```
