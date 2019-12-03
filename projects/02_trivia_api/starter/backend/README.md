@@ -244,7 +244,48 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
     }
     
     ```
+ 
+#### GET /categories/{category_id}/questions
+
+  - **PURPOSE:** To get a list of paginated questions based on category
   
+  - **URL:** {BaseURL}/categories/{category_id}/questions
+  
+  - **HTTP METHOD:** GET
+  
+  - **REQUEST ARGUMENTS:** category_id (Mandatory), page (optional)
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/categories/6/questions?page=1`
+    
+  - **RETURNS:** A formatted Json string contains a list of paginated questions, 
+  number of total questions,  current category and the success value.
+  
+ ```
+  {
+    "current_category": {
+        "id": 6,
+        "type": "Sports"
+    },
+    "questions": [
+        {
+            "answer": "Brazil",
+            "category": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": 6,
+            "difficulty": 4,
+            "id": 11,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        }
+    ],
+    "success": true,
+    "total_questions": 2
+}
+ ```
 
 ## Testing The Backend
 To run the tests, run
