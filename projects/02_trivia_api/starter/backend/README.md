@@ -207,7 +207,7 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
     
     
   - **RETURNS:** 
-  - For the search function: It will return a formatted Json string contains a list of paginated questions (only question objects that include that string within their question),number of total questionsand the success value.
+    - For the search function: It will return a formatted Json string contains a list of paginated questions (only question objects that include that string within their question),number of total questionsand the success value.
   
     - For a question creation: the success value will be returned.
     
@@ -237,7 +237,6 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 
 ```
 
-    ```
     Create a Question Response body
     
     {
