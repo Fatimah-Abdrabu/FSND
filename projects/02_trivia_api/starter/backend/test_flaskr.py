@@ -83,7 +83,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions'])
         self.assertEqual(len(data['questions']),0)
      
-     """
+    """
     2 Tests Cases for the delete_question
     The first test for the expected behavior
     The second test for handling one kind of error (422: request unprocessable - when the question_id is not exist)
@@ -129,7 +129,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 405)
         self.assertEqual(data['success'], False)
         
-     """
+    """
     2 Tests Cases for the search_question
     The first test for the expected behavior (with a valid searchTerm)
     The second test shows how the response would be in case of no matches with the provided searchTerm
@@ -151,7 +151,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertEqual(data['total_questions'], 0)
         
-     """
+    """
     2 Tests Cases for the get_questions_by_category
     The first test for the expected behavior
     The second test for handling one kind of error (422: request unprocessable - when the category_id is not exist)
@@ -176,7 +176,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
      
-     """
+    """
     2 Tests Cases for the set_quiz
     The first test for the expected behavior
     The second test for handling one kind of error (405: method_not_allowed)
