@@ -180,8 +180,9 @@ def create_app(test_config=None):
 
             if quiz_category != 0:
                 q = Question.query.order_by(func.random())
-                question_filter = q.filter(Question.category == quiz_category, Question.id.notin_(previous_questions))
-                question = question_filter.first()
+                q_f = q.filter(Question.category == quiz_category,
+                               Question.id.notin_(previous_questions))
+                question = q_f.first()
             else:
                 question = Question.query.order_by(func.random())
                 .filter(Question.id.notin_(previous_questions)).first()
