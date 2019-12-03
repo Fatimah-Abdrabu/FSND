@@ -1,7 +1,5 @@
 # Full Stack Trivia API Backend
 
-## Getting Started
-
 ### Installing Dependencies
 
 #### Python 3.7
@@ -52,45 +50,273 @@ Setting the `FLASK_ENV` variable to `development` will detect file changes and r
 
 Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` directory and the `__init__.py` file to find the application. 
 
-## Tasks
+## API Reference
 
-One note before you delve into your tasks: for each endpoint you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior. 
+### Getting Started
+- Base URL: Currently it will be running locally at the default, `http://127.0.0.1:5000/`.
+- Authentication: No authentication or API keys is required. 
 
-1. Use Flask-CORS to enable cross-domain requests and set response headers. 
-2. Create an endpoint to handle GET requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories. 
-3. Create an endpoint to handle GET requests for all available categories. 
-4. Create an endpoint to DELETE question using a question ID. 
-5. Create an endpoint to POST a new question, which will require the question and answer text, category, and difficulty score. 
-6. Create a POST endpoint to get questions based on category. 
-7. Create a POST endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question. 
-8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
-9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
+### Error Handling
 
-REVIEW_COMMENT
+  A list of error handlers have been set for the common expected errors 
+  including `400`, `404`, `422` and `500`. 
+  All are returned as JSON objects in the following format: success value (always False), error code and the error message
+  
 ```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
 
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
-
-GET '/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
+{
+        "success": False,
+        "error": 404,
+        "message": "resources not found"
+}
 
 ```
 
+### Endpoints 
+#### GET /categories
+  - **PURPOSE:** To get all available categories
+  
+  - **URL:** {BaseURL}/categories
+  
+  - **HTTP METHOD:** GET
+  
+  - **REQUEST ARGUMENTS:** none
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/categories`
+    
+  - **RETURNS:** A formatted Json string contains a list of category objects and the success value
+  ```
+  {  
+   "categories":[  
+      {  
+         "id":1,
+         "type":"Science"
+      },
+      {  
+         "id":2,
+         "type":"Art"
+      },
+      {  
+         "id":3,
+         "type":"Geography"
+      },
+      {  
+         "id":4,
+         "type":"History"
+      },
+      {  
+         "id":5,
+         "type":"Entertainment"
+      },
+      {  
+         "id":6,
+         "type":"Sports"
+      }
+   ],
+   "success":true
+}
+  ```
 
-## Testing
+#### GET /questions
+
+  - **PURPOSE:** To get a list of paginated questions
+  
+  - **URL:** {BaseURL}/questions
+  
+  - **HTTP METHOD:** GET
+  
+  - **REQUEST ARGUMENTS:** page (optional)
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/questions?page=2`
+    
+  - **RETURNS:** A formatted Json string contains a list of paginated questions, number of total questions,  categories and the success value.
+  ```
+  {
+    "categories": [
+        {
+            "id": 1,
+            "type": "Science"
+        },
+        {
+            "id": 2,
+            "type": "Art"
+        },
+        {
+            "id": 3,
+            "type": "Geography"
+        }
+    ],
+    "questions": [
+        {
+            "answer": "Escher",
+            "category": 2,
+            "difficulty": 1,
+            "id": 16,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Mona Lisa",
+            "category": 2,
+            "difficulty": 3,
+            "id": 17,
+            "question": "La Giaconda is better known as what?"
+        }
+    ],
+    "success": true,
+    "total_questions": 19
+}
+  ```
+  
+#### DELETE /questions/{question_id}
+
+  - **PURPOSE:** To delete a specific question By its ID
+  
+  - **URL:** {BaseURL}/questions/{question_id}
+  
+  - **HTTP METHOD:** DELETE
+  
+  - **REQUEST ARGUMENTS:** question_id (Mandatory), page (optional)
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/questions/2?page=2`
+    
+  - **RETURNS:** A formatted Json string contains a list of paginated questions,after deleting the required ID, 
+  number of total questions,  categories and the success value (Same as Above).
+  
+  
+  
+  #### POST /questions
+
+  - **PURPOSE:** This endpoint compine two functions: Creating a question Or Searching for questions based on a search term
+  
+  - **URL:** {BaseURL}/questions
+  
+  - **HTTP METHOD:** POST
+  
+  - **REQUEST ARGUMENTS:** 
+     - For searching: the searchTerm string is required, page is optional
+     
+       *Sample Request For Searching*: 
+       
+       `curl http://127.0.0.1:5000/questions?page=1 -X POST -H "Content-Type: application/json" -d '{"searchTerm":"title"}'`
+       
+     - To Add a new question: question, answer, difficulty and the category are all required
+       
+       *Sample Request For Creating a Question*:
+       
+       `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"Is It a test Question?", "answer":"Yes", "difficulty":"1", "category":"5"}'`
+    
+    
+  - **RETURNS:** 
+    - For the search function: It will return a formatted Json string contains a list of paginated questions (only question objects that include that string within their question),number of total questionsand the success value.
+  
+    - For a question creation: the success value will be returned.
+    
+```
+    Search Response body
+
+{
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+            "answer": "Edward Scissorhands",
+            "category": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        }
+    ],
+    "success": true,
+    "total_questions": 2
+}
+
+```
+
+    Create a Question Response body
+    
+    {
+    "success": true
+    }
+    
+    ```
+ 
+ 
+#### GET /categories/{category_id}/questions
+
+  - **PURPOSE:** To get a list of paginated questions based on category
+  
+  - **URL:** {BaseURL}/categories/{category_id}/questions
+  
+  - **HTTP METHOD:** GET
+  
+  - **REQUEST ARGUMENTS:** category_id (Mandatory), page (optional)
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/categories/6/questions?page=1`
+    
+  - **RETURNS:** A formatted Json string contains a list of paginated questions, 
+  number of total questions,  current category and the success value.
+  
+ ```
+  {
+    "current_category": {
+        "id": 6,
+        "type": "Sports"
+    },
+    "questions": [
+        {
+            "answer": "Brazil",
+            "category": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": 6,
+            "difficulty": 4,
+            "id": 11,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        }
+    ],
+    "success": true,
+    "total_questions": 2
+}
+ ```
+
+#### POST /quizzes
+
+  - **PURPOSE:** To get a random questions to play the quiza
+  
+  - **URL:** {BaseURL}/quizzes
+  
+  - **HTTP METHOD:** POST
+  
+  - **REQUEST ARGUMENTS:** category (it could be 0), array of previous_questions (it could be empty)
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/quizzes -X POST -H "Content-Type: application/json" -d '{"quiz_category":"6","previous_questions":["10"]}'`
+    
+  - **RETURNS:** A formatted Json string contains a selected random question and the success value. If No questions found, the success value will only get returned
+
+```
+{
+    "question": {
+        "answer": "Uruguay",
+        "category": 6,
+        "difficulty": 4,
+        "id": 11,
+        "question": "Which country won the first ever soccer World Cup in 1930?"
+    },
+    "success": true
+}
+
+```
+  
+## Testing The Backend
 To run the tests, run
 ```
 dropdb trivia_test
