@@ -26,17 +26,16 @@ def create_app(test_config=None):
   @app.after_request
   def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE') #Though no need for PUT now #
     return response
   
   '''
-  @TODO: 
-
   PURPOSE: To get all available categories
   URL: {BaseURL}/categories
   HTTP METHOD: GET
-  
-  
+  REQUEST ARGUMENTS: none
+  RETURNS: A formatted Json string contains a list of category objects and the success value
+   
   '''
   @app.route('/categories', methods=['GET'])
   def get_categories():
@@ -51,19 +50,11 @@ def create_app(test_config=None):
     except:
      abort(422)
 
-  '''
-  @TODO: 
-  Create an endpoint to handle GET requests for questions, 
-  including pagination (every 10 questions). 
-  This endpoint should return a list of questions, 
-  number of total questions, current category, categories. 
 
-  TEST: At this point, when you start the application
-  you should see questions and categories generated,
-  ten questions per page and pagination at the bottom of the screen for three pages.
-  Clicking on the page numbers should update the questions. 
   '''
-
+  A helper method to return a paginated questions list, so we don't need to repeat it once it's needed
+   
+  '''
   def paginate_questions(request, selection):
     try:
       page = request.args.get('page', 1, type=int)
@@ -75,6 +66,16 @@ def create_app(test_config=None):
      abort(422)
   
 
+  '''
+  PURPOSE: To get a list of paginated questions
+  URL: {BaseURL}/questions
+  HTTP METHOD: GET
+  REQUEST ARGUMENTS: page (optional)
+  RETURNS: A formatted Json string contains a list of paginated questions, 
+  number of total questions,  categories and the success value.
+   
+  '''
+  
   @app.route('/questions', methods=['GET'])
   def get_questions():
     try:
@@ -93,13 +94,15 @@ def create_app(test_config=None):
     except:
      abort(422)
     
-    
+  
   '''
-  @TODO: 
-  Create an endpoint to DELETE question using a question ID. 
-
-  TEST: When you click the trash icon next to a question, the question will be removed.
-  This removal will persist in the database and when you refresh the page. 
+  PURPOSE: To delete a specific question By its ID
+  URL: {BaseURL}/questions/<question_id>
+  HTTP METHOD: DELETE
+  REQUEST ARGUMENTS: question_id (Mandatory)
+  RETURNS: A formatted Json string contains a list of paginated questions, 
+  number of total questions,  categories and the success value.
+   
   '''
   
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
@@ -130,26 +133,19 @@ def create_app(test_config=None):
      abort(422)
     
  
+  
   '''
-  @TODO: 
-  Create an endpoint to POST a new question, 
-  which will require the question and answer text, 
-  category, and difficulty score.
-
-  TEST: When you submit a question on the "Add" tab, 
-  the form will clear and the question will appear at the end of the last page
-  of the questions list in the "List" tab.  
-  '''
-
-  '''
-  @TODO: 
-  Create a POST endpoint to get questions based on a search term. 
-  It should return any questions for whom the search term 
-  is a substring of the question. 
-
-  TEST: Search by any phrase. The questions list will update to include 
-  only question that include that string within their question. 
-  Try using the word "title" to start. 
+  PURPOSE: This endpoint compine two functions: Creating a question Or Searching for questions based on a search term
+  URL: {BaseURL}/questions
+  HTTP METHOD: POST
+  REQUEST ARGUMENTS: 
+    - For searching: the searchTerm string is required, page is optional
+    - To Add a new question: question, answer, difficulty and the category are all required
+  RETURNS: 
+    - For the search function: It will return a formatted Json string contains a list of paginated questions (only question objects that include that string within their question), 
+      number of total questionsand the success value.
+    - For a question creation: the success value will be returned. 
+   
   '''
 
   @app.route('/questions', methods=['POST'])
@@ -192,15 +188,15 @@ def create_app(test_config=None):
         abort(422)
     
     
- 
-
+  
   '''
-  @TODO: 
-  Create a GET endpoint to get questions based on category. 
-
-  TEST: In the "List" tab / main screen, clicking on one of the 
-  categories in the left column will cause only questions of that 
-  category to be shown. 
+  PURPOSE: To get a list of paginated questions based on category
+  URL: {BaseURL}/categories/<category_id>/questions
+  HTTP METHOD: GET
+  REQUEST ARGUMENTS: page (optional)
+  RETURNS: A formatted Json string contains a list of paginated questions, 
+  number of total questions,  current category and the success value.
+   
   '''
 
   @app.route('/categories/<int:category_id>/questions', methods=['GET'])
@@ -226,18 +222,17 @@ def create_app(test_config=None):
     except:
       abort(422)
 
-  '''
-  @TODO: 
-  Create a POST endpoint to get questions to play the quiz. 
-  This endpoint should take category and previous question parameters 
-  and return a random questions within the given category, 
-  if provided, and that is not one of the previous questions. 
 
-  TEST: In the "Play" tab, after a user selects "All" or a category,
-  one question at a time is displayed, the user is allowed to answer
-  and shown whether they were correct or not. 
+  
   '''
-
+  PURPOSE: To get a random questions to play the quiza
+  URL: {BaseURL}/quizzes
+  HTTP METHOD: POST
+  REQUEST ARGUMENTS: category (it could be 0), array of previous_questions (it could be empty)
+  RETURNS: A formatted Json string contains a selected random question and the success value.
+           If No questions found, the success value will only get returned
+   
+  '''
 
   @app.route('/quizzes', methods=['POST'])
   def set_quiz():
@@ -270,10 +265,12 @@ def create_app(test_config=None):
           
     except:
      abort(422)  
+     
+     
   '''
-  @TODO: 
-  Create error handlers for all expected errors 
-  including 404 and 422. 
+  A list of error handlers for the common expected errors 
+  including 400, 404, 422 and 500. 
+  All are returned as JSON objects in the following format: success value (always False), error code and the error message
   '''
   @app.errorhandler(404)
   def not_found(error):
