@@ -194,16 +194,25 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
   
   - **REQUEST ARGUMENTS:** 
      - For searching: the searchTerm string is required, page is optional
+     
+       *Sample Request For Searching*: 
+       
+       `curl http://127.0.0.1:5000/questions?page=1 -X POST -H "Content-Type: application/json" -d '{"searchTerm":"title"}'`
+       
      - To Add a new question: question, answer, difficulty and the category are all required
-  
-    *Sample Request For Searching*: `curl http://127.0.0.1:5000/questions?page=1 -X POST -H "Content-Type: application/json" -d '{"searchTerm":"title"}'``
-    *Sample Request For Creating a Question*: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"Is It a test Question?", "answer":"Yes", "difficulty":"1", "category":"5"}'`
+       
+       *Sample Request For Creating a Question*:
+       
+       `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"Is It a test Question?", "answer":"Yes", "difficulty":"1", "category":"5"}'`
     
-  - **RETURNS:** - For the search function: It will return a formatted Json string contains a list of paginated questions (only question objects that include that string within their question),number of total questionsand the success value.
+    
+  - **RETURNS:** 
+  - For the search function: It will return a formatted Json string contains a list of paginated questions (only question objects that include that string within their question),number of total questionsand the success value.
+  
     - For a question creation: the success value will be returned.
     
-    ```
-    *Search Response body*
+```
+    Search Response body
 
 {
     "questions": [
@@ -227,8 +236,9 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 }
 
 ```
+
     ```
-    *Create a Question Response body*
+    Create a Question Response body
     
     {
     "success": true
