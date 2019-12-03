@@ -115,8 +115,8 @@ def create_app(test_config=None):
 
         if search:
             try:
-                selection = Question.query.order_by(Question.id)
-                .filter(Question.question.ilike('%{}%'.format(search))).all()
+                selection = Question.query.order_by(Question.id).filter
+                (Question.question.ilike('%{}%'.format(search))).all()
                 current_questions = paginate_questions(request, selection)
 
                 return jsonify(
@@ -147,16 +147,16 @@ def create_app(test_config=None):
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def get_questions_by_category(category_id):
         try:
-            selection = Question.query.order_by(Question.id)
-            .filter(Question.category == category_id).all()
+            selection = Question.query.order_by(Question.id).filter
+            (Question.category == category_id).all()
 
             if selection is None:
                 abort(404)
 
             current_questions = paginate_questions(request, selection)
 
-            category = Category.query
-            .filter(Category.id == category_id).one_or_none()
+            category = Category.query.filter
+            (Category.id == category_id).one_or_none()
             current_category = category.format()
 
             return jsonify({
@@ -184,8 +184,8 @@ def create_app(test_config=None):
                                Question.id.notin_(previous_questions))
                 question = q_f.first()
             else:
-                question = Question.query.order_by(func.random())
-                .filter(Question.id.notin_(previous_questions)).first()
+                question = Question.query.order_by(func.random()).filter
+                (Question.id.notin_(previous_questions)).first()
 
             if question:
                 return jsonify({'success': True,
