@@ -53,8 +53,8 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 ## API Reference
 
 ### Getting Started
-- Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
-- Authentication: This version of the application does not require authentication or API keys. 
+- Base URL: Currently it will be running locally at the default, `http://127.0.0.1:5000/`.
+- Authentication: No authentication or API keys is required. 
 
 ### Error Handling
 
@@ -166,6 +166,76 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
     "total_questions": 19
 }
   ```
+  
+#### DELETE /questions/{question_id}
+
+  - **PURPOSE:** To delete a specific question By its ID
+  
+  - **URL:** {BaseURL}/questions/{question_id}
+  
+  - **HTTP METHOD:** DELETE
+  
+  - **REQUEST ARGUMENTS:** question_id (Mandatory), page (optional)
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/questions/2?page=2`
+    
+  - **RETURNS:** A formatted Json string contains a list of paginated questions,after deleting the required ID, 
+  number of total questions,  categories and the success value (Same as Above).
+  
+  
+  
+  #### POST /questions
+
+  - **PURPOSE:** This endpoint compine two functions: Creating a question Or Searching for questions based on a search term
+  
+  - **URL:** {BaseURL}/questions
+  
+  - **HTTP METHOD:** POST
+  
+  - **REQUEST ARGUMENTS:** 
+     - For searching: the searchTerm string is required, page is optional
+     - To Add a new question: question, answer, difficulty and the category are all required
+  
+    *Sample Request For Searching*: `curl http://127.0.0.1:5000/questions?page=1 -X POST -H "Content-Type: application/json" -d '{"searchTerm":"title"}'``
+    *Sample Request For Creating a Question*: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question":"Is It a test Question?", "answer":"Yes", "difficulty":"1", "category":"5"}'`
+    
+  - **RETURNS:** - For the search function: It will return a formatted Json string contains a list of paginated questions (only question objects that include that string within their question),number of total questionsand the success value.
+    - For a question creation: the success value will be returned.
+    
+    ```
+    *Search Response body*
+
+{
+    "questions": [
+        {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+            "answer": "Edward Scissorhands",
+            "category": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        }
+    ],
+    "success": true,
+    "total_questions": 2
+}
+
+```
+    ```
+    *Create a Question Response body*
+    
+    {
+    "success": true
+    }
+    
+    ```
+  
 
 ## Testing The Backend
 To run the tests, run
