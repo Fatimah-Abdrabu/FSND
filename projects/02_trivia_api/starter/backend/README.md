@@ -117,8 +117,57 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 }
   ```
 
+#### GET /questions
 
-## Testing
+  - **PURPOSE:** To get a list of paginated questions
+  
+  - **URL:** {BaseURL}/questions
+  
+  - **HTTP METHOD:** GET
+  
+  - **REQUEST ARGUMENTS:** page (optional)
+  
+    *Sample Request*: `curl http://127.0.0.1:5000/questions?page=2`
+    
+  - **RETURNS:** A formatted Json string contains a list of paginated questions, number of total questions,  categories and the success value.
+  ```
+  {
+    "categories": [
+        {
+            "id": 1,
+            "type": "Science"
+        },
+        {
+            "id": 2,
+            "type": "Art"
+        },
+        {
+            "id": 3,
+            "type": "Geography"
+        }
+    ],
+    "questions": [
+        {
+            "answer": "Escher",
+            "category": 2,
+            "difficulty": 1,
+            "id": 16,
+            "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+        },
+        {
+            "answer": "Mona Lisa",
+            "category": 2,
+            "difficulty": 3,
+            "id": 17,
+            "question": "La Giaconda is better known as what?"
+        }
+    ],
+    "success": true,
+    "total_questions": 19
+}
+  ```
+
+## Testing The Backend
 To run the tests, run
 ```
 dropdb trivia_test
