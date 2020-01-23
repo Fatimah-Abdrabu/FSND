@@ -138,7 +138,7 @@ def update_drink(payload, drink_id):
             abort(404)
 
         body = request.get_json()
-        print(body)
+
         if 'title' in body:
             drink.title = body.get('title')
 
