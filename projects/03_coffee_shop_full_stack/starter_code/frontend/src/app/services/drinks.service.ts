@@ -85,6 +85,7 @@ export class DrinksService {
   getHeaders() {
     const header = {
       headers: new HttpHeaders()
+        .set('Content-Type', 'application/json')
         .set('Authorization',  `Bearer ${this.auth.activeJWT()}`)
     };
     return header;
@@ -98,6 +99,7 @@ export class DrinksService {
         console.log(res);
       });
     } else {
+      
       this.http.get(this.url + '/drinks', this.getHeaders())
       .subscribe((res: any) => {
         this.drinksToItems(res.drinks);
@@ -108,7 +110,8 @@ export class DrinksService {
   }
 
   saveDrink(drink: Drink) {
-    if (drink.id >= 0) { // patch
+    if (drink.id > 0) { // patch
+      console.log(drink);
       this.http.patch(this.url + '/drinks/' + drink.id, drink, this.getHeaders())
       .subscribe( (res: any) => {
         if (res.success) {
